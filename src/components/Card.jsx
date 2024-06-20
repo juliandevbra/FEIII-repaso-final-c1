@@ -3,7 +3,18 @@ import { Link } from "react-router-dom";
 import { useBeerContext } from "../Context/Context";
 
 const Card = ({ data }) => {
-  const { setCart } = useBeerContext();
+  const { state, dispatch } = useBeerContext();
+  const findCart = state.cart.find((item) => data.id === item.id);
+  // console.log(findCart);
+
+  const addCart = () => {
+    if (findCart) {
+      dispatch({ type: "DELETE_CART", payload: data });
+    } else {
+      dispatch({ type: "ADD_CART", payload: data });
+    }
+  };
+
   return (
     <div className="card">
       <Link to={"/beer/" + data.id}>
@@ -12,7 +23,7 @@ const Card = ({ data }) => {
       </Link>
       <p>{data.price}</p>
 
-      <button onClick={() => setCart((prev) => [...prev, data])}>🛒</button>
+      <button onClick={addCart}>{findCart ? "❌" : "🛒"}</button>
     </div>
   );
 };
