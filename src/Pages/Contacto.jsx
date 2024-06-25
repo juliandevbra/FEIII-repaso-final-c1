@@ -1,16 +1,25 @@
-import React from 'react'
+import React, { useState } from "react";
+import { useInput } from "../utils/useInput";
 
 const Contacto = () => {
-  return (
-    <div className='grid'>
-        <h2>¿Queres saber mas de nosotros?</h2>
-        <h2>¿Sos revendedo y queres conocer precios mayoristas?</h2>
-        <p>No dudes en contactarnos
-          <code>Email: punkapi@beers.com</code>
-          <code>Telefono: 11324568</code>
-        </p>
-    </div>
-  )
-}
+  const nombre = useInput("text");
+  const email = useInput("email");
+  const tel = useInput("number");
 
-export default Contacto
+  console.log(nombre);
+  return (
+    <div className="grid">
+      <form>
+        <label>Nombre:</label>
+        <input {...nombre} />
+        <label>Email: </label>
+        <input {...email} />
+        <label>Telefono</label>
+        <input {...tel} />
+        <button>Enviar</button>
+      </form>
+    </div>
+  );
+};
+
+export default Contacto;

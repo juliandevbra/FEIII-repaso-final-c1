@@ -9,6 +9,7 @@ const Beer = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   console.log(id);
+
   const getBeer = async () => {
     //Deberas completar este fetch con el parametro correspondiente
     const res = await fetch(`https://api.sampleapis.com/beers/ale/${id}`);

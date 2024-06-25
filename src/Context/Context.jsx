@@ -1,28 +1,10 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
+import { reducer } from "../utils/reducer";
+import Swal from "sweetalert2";
 
 const BeerContext = createContext();
 
 const lsCart = JSON.parse(localStorage.getItem("cart")) || [];
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "GET_BEERS": //Esto es obligatorio
-      return { ...state, beers: action.payload };
-    case "GET_BEER": //Esto es extra
-      return {};
-    case "ADD_CART": //Esto es obligatorio
-      return { ...state, cart: [...state.cart, action.payload] };
-    case "TOGGLE_THEME": //Esto es obligatorio
-      return { ...state, theme: "" };
-    case "DELETE_CART": //Esto es extra
-      const filterCart = state.cart.filter(
-        (item) => item.id !== action.payload.id
-      );
-      return { ...state, cart: filterCart };
-    default:
-      throw new Error("No se pudo modificar el estado.");
-  }
-};
 
 const initialState = {
   beers: [],
@@ -32,15 +14,24 @@ const initialState = {
 };
 
 const Context = ({ children }) => {
-  // const [beers, setBeers] = useState([]);
-  // const [cart, setCart] = useState(lsCart);
-  // Crear un useReducer con el que se maneje el cart, llamado a API, cambio de claro a oscuro
   const [state, dispatch] = useReducer(reducer, initialState);
   console.log(state);
+
+  const url = "https://api.sampleapis.com/beers/ale/";
+  // const url = "https://api.punkapi.com/v2/beers";
   const getBeers = async () => {
-    const res = await fetch("https://api.sampleapis.com/beers/ale/");
-    const data = await res.json();
-    dispatch({ type: "GET_BEERS", payload: data });
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      dispatch({ type: "GET_BEERS", payload: data });
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Error al traer la lista de cervezas!",
+        // footer: err,
+      });
+    }
   };
 
   useEffect(() => {
